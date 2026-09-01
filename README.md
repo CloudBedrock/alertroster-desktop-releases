@@ -15,11 +15,13 @@ need one on the network to be useful at all.
 |---|---|---|
 | **Windows** 10/11 (x64) | `AlertRoster-Setup.exe` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-Setup.exe) |
 | **macOS** 12+ (Universal) | `AlertRoster-macOS.dmg` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-macOS.dmg) |
-| **Linux** Debian/Ubuntu (x86-64) | `alertroster-desktop_0.1_amd64.deb` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/alertroster-desktop_0.1_amd64.deb) |
+| **Linux** Debian/Ubuntu (x86-64) | `alertroster-desktop_amd64.deb` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/alertroster-desktop_amd64.deb) |
 | **Raspberry Pi** (arm64) | `AlertRoster-RaspberryPi-arm64.tar.gz` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-RaspberryPi-arm64.tar.gz) |
 
 Those links always resolve to the newest release, so they are safe to bookmark or link from
-other projects. [All releases →](https://github.com/CloudBedrock/alertroster-desktop-releases/releases)
+other projects. Asset **filenames are deliberately stable and carry no version** — the version
+lives inside the package, where the installer reads it — so these URLs keep working release
+after release. [All releases →](https://github.com/CloudBedrock/alertroster-desktop-releases/releases)
 
 ### Install
 
@@ -31,7 +33,7 @@ so Gatekeeper should let it straight through.
 **Debian / Ubuntu**
 
 ```bash
-sudo apt install ./alertroster-desktop_0.1_amd64.deb
+sudo apt install ./alertroster-desktop_amd64.deb
 ```
 
 **Raspberry Pi** — the tarball carries the desktop app and `alertroster-receiverd`, the
