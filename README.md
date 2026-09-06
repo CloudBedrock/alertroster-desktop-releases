@@ -16,6 +16,7 @@ need one on the network to be useful at all.
 | **Windows** 10/11 (x64) | `AlertRoster-Setup.exe` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-Setup.exe) |
 | **macOS** 12+ (Universal) | `AlertRoster-macOS.dmg` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-macOS.dmg) |
 | **Linux** Debian/Ubuntu (x86-64) | `alertroster-desktop_amd64.deb` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/alertroster-desktop_amd64.deb) |
+| **Arch / Omarchy** (x86-64) | `alertroster-desktop-x86_64.pkg.tar.zst` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/alertroster-desktop-x86_64.pkg.tar.zst) |
 | **Raspberry Pi** (arm64) | `AlertRoster-RaspberryPi-arm64.tar.gz` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-RaspberryPi-arm64.tar.gz) |
 
 Those links always resolve to the newest release, so they are safe to bookmark or link from
@@ -27,13 +28,21 @@ after release. [All releases →](https://github.com/CloudBedrock/alertroster-de
 
 **Windows** — run the installer. It is signed, so SmartScreen should stay quiet.
 
-**macOS** — open the `.dmg` and drag AlertRoster to Applications. Signed with a Developer ID,
-so Gatekeeper should let it straight through.
+**macOS** — open the `.dmg` and run **AlertRoster.pkg** inside it. There is no
+drag-to-Applications step: the installer also registers `alertroster-receiverd` to start at
+login, so a copied app would leave you with no receiver running. The disk image is signed with
+a Developer ID and notarized, so Gatekeeper lets it through.
 
 **Debian / Ubuntu**
 
 ```bash
 sudo apt install ./alertroster-desktop_amd64.deb
+```
+
+**Arch / Omarchy**
+
+```bash
+sudo pacman -U alertroster-desktop-x86_64.pkg.tar.zst
 ```
 
 **Raspberry Pi** — the tarball carries the desktop app and `alertroster-receiverd`, the
@@ -57,8 +66,8 @@ sha256sum -c SHA256SUMS --ignore-missing
 | Artifact | Signing |
 |---|---|
 | `AlertRoster-Setup.exe` | Authenticode, **Cloud Bedrock, LLC** (SSL.com), timestamped |
-| `AlertRoster-macOS.dmg` | Apple **Developer ID Application: Cloud Bedrock, LLC** |
-| `.deb` and `.tar.gz` | Not individually signed — verify with `SHA256SUMS` |
+| `AlertRoster-macOS.dmg` | Apple **Developer ID Application: Cloud Bedrock, LLC**, notarized and stapled |
+| `.deb`, `.pkg.tar.zst`, `.tar.gz` | Not individually signed — verify with `SHA256SUMS` |
 
 The Linux artifacts are deliberately unsigned rather than accidentally so. Linux has no
 per-binary signature check at install or run time: Debian's trust model signs the *repository*
@@ -68,8 +77,8 @@ one-off downloads, which is what these are.
 
 ## After you install it
 
-Turn on **Accept sources from the LAN** under *Service → Pairing* so the integrations can
-reach the station.
+Turn on **Accept sources from the LAN** under *Service → Pairing* so these can reach the
+station:
 
 | | |
 |---|---|
@@ -79,6 +88,12 @@ reach the station.
 
 The station works standalone on your LAN. Sign in at [alertroster.com](https://alertroster.com)
 and it also escalates off-site — phones, roster, on-site beacons.
+
+That account is what the **n8n** community node drives, over the API rather than the LAN:
+[n8n-nodes-alertroster](https://github.com/CloudBedrock/n8n-nodes-alertroster)
+([npm](https://www.npmjs.com/package/n8n-nodes-alertroster)) — raise and drive incidents, read
+and edit on-call schedules, act on handoffs and overrides, run dead-man's-switch check-ins, and
+start workflows when an incident changes state.
 
 ## Issues
 
