@@ -1,102 +1,90 @@
-# AlertRoster Desktop — downloads
+# AlertRoster Desktop
 
-The **receiver station**: the thing that takes an alert, sounds it, drives relays and wall
-displays, and waits for a person to acknowledge it.
+AlertRoster Desktop turns a computer into an **AlertRoster station**. It shows your open
+incidents on a board, takes over the whole screen and sounds an alarm when one needs
+somebody, and drives relays, sirens and wall displays. Every AlertRoster plan includes it.
 
-Everything else in AlertRoster raises alerts. This is what answers them, so the integrations
-need one on the network to be useful at all.
+A station is two programs, and every installer sets up both:
 
-> This repository holds **binaries and release notes only** — no source. It has its own tags
-> and its own cadence, so downloads stay put no matter what any integration is doing.
+- **AlertRoster**, the window you look at.
+- **The receiver service** (`alertroster-receiverd`), which runs in the background. It
+  holds the alerts, sounds the outputs, and stays signed in to your account while the
+  window is closed. The installer starts it at login.
 
 ## Download
 
-| Platform | File | |
+| Platform | Requires | Download |
 |---|---|---|
-| **Windows** 10/11 (x64) | `AlertRoster-Setup.exe` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-Setup.exe) |
-| **macOS** 12+ (Universal) | `AlertRoster-macOS.dmg` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-macOS.dmg) |
-| **Linux** Debian/Ubuntu (x86-64) | `alertroster-desktop_amd64.deb` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/alertroster-desktop_amd64.deb) |
-| **Arch / Omarchy** (x86-64) | `alertroster-desktop-x86_64.pkg.tar.zst` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/alertroster-desktop-x86_64.pkg.tar.zst) |
-| **Raspberry Pi** (arm64) | `AlertRoster-RaspberryPi-arm64.tar.gz` | [Download](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-RaspberryPi-arm64.tar.gz) |
+| **Windows** | Windows 10 or 11, 64-bit | [AlertRoster-Setup.exe](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-Setup.exe) |
+| **macOS** | macOS 13 or later, Apple silicon (M1 or newer) | [AlertRoster-macOS.dmg](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-macOS.dmg) |
+| **Ubuntu / Debian** | Ubuntu 24.04 or later, Debian 13 or later, x86-64 | [alertroster-desktop_amd64.deb](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/alertroster-desktop_amd64.deb) |
+| **Arch / Omarchy** | x86-64 | [alertroster-desktop-x86_64.pkg.tar.zst](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/alertroster-desktop-x86_64.pkg.tar.zst) |
+| **Raspberry Pi** | See the [Raspberry Pi page](raspberry-pi.md) | [AlertRoster-RaspberryPi-arm64.tar.gz](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-RaspberryPi-arm64.tar.gz) |
 
-Those links always resolve to the newest release, so they are safe to bookmark or link from
-other projects. Asset **filenames are deliberately stable and carry no version** — the version
-lives inside the package, where the installer reads it — so these URLs keep working release
-after release. [All releases →](https://github.com/CloudBedrock/alertroster-desktop-releases/releases)
+These links always point at the newest release. The file names never change, so the
+links are safe to bookmark. What changed in each release is on the
+[releases page](https://github.com/CloudBedrock/alertroster-desktop-releases/releases).
 
-### Install
+## Set up a station
 
-**Windows** — run the installer. It is signed, so SmartScreen should stay quiet.
+1. **Install it:** follow the page for [Windows](windows.md), [macOS](macos.md) or
+   [Linux](linux.md).
+2. **Sign it in and check it works:** see [First run](first-run.md). This covers signing
+   in to your account, raising a test alert, and connecting sirens and integrations.
+3. **Put it on a wall** (optional): see [Wall displays](wall-display.md). Read this
+   before relying on a station that nobody is sitting at. **The receiver service starts
+   when someone logs in to the computer, not when the computer turns on.**
 
-**macOS** — open the `.dmg` and run **AlertRoster.pkg** inside it. There is no
-drag-to-Applications step: the installer also registers `alertroster-receiverd` to start at
-login, so a copied app would leave you with no receiver running. The disk image is signed with
-a Developer ID and notarized, so Gatekeeper lets it through.
+If something doesn't look right, see [Troubleshooting](troubleshooting.md).
 
-**Debian / Ubuntu**
+## Integrations
 
-```bash
-sudo apt install ./alertroster-desktop_amd64.deb
-```
+These send alerts to a station on your network. Pair each one under **Service →
+Pairing…**. See [First run](first-run.md#5-connect-integrations).
 
-**Arch / Omarchy**
+| | |
+|---|---|
+| **Home Assistant** | [alertroster-hacs](https://github.com/CloudBedrock/alertroster-hacs): raise alerts from automations, and react when nobody answers |
+| **Omarchy** | [omarchy-alertroster](https://github.com/CloudBedrock/omarchy-alertroster): page yourself from your desktop |
+| **Asterisk** | [alertroster-ari](https://github.com/CloudBedrock/alertroster-ari): phone the roster until someone acknowledges |
 
-```bash
-sudo pacman -U alertroster-desktop-x86_64.pkg.tar.zst
-```
+The [n8n node](https://github.com/CloudBedrock/n8n-nodes-alertroster) is different. It
+works with your AlertRoster account over the internet, with its own credentials, so it
+doesn't pair with a station.
 
-**Raspberry Pi** — the tarball carries the desktop app and `alertroster-receiverd`, the
-headless receiver for a Pi on the wall:
+## Check your download
 
-```bash
-tar xzf AlertRoster-RaspberryPi-arm64.tar.gz
-```
-
-## Verify your download
-
-Each release publishes a `SHA256SUMS` file covering every artifact.
+Every release publishes a `SHA256SUMS` file covering each download. In the folder you
+downloaded into:
 
 ```bash
 curl -LO https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/SHA256SUMS
 sha256sum -c SHA256SUMS --ignore-missing
 ```
 
-### What is signed, and what that means
+On a Mac, use `shasum -a 256 -c SHA256SUMS --ignore-missing`. On Windows, run
+`Get-FileHash AlertRoster-Setup.exe` in PowerShell and compare the result with the line for
+that file in `SHA256SUMS`.
 
-| Artifact | Signing |
+| Download | Signed by |
 |---|---|
-| `AlertRoster-Setup.exe` | Authenticode, **Cloud Bedrock, LLC** (SSL.com), timestamped |
-| `AlertRoster-macOS.dmg` | Apple **Developer ID Application: Cloud Bedrock, LLC**, notarized and stapled |
-| `.deb`, `.pkg.tar.zst`, `.tar.gz` | Not individually signed — verify with `SHA256SUMS` |
+| `AlertRoster-Setup.exe` | Authenticode, **Cloud Bedrock, LLC** |
+| `AlertRoster-macOS.dmg` | Apple Developer ID, **Cloud Bedrock, LLC**, notarized by Apple |
+| Linux and Raspberry Pi files | Not signed individually. Check them against `SHA256SUMS`. |
 
-The Linux artifacts are deliberately unsigned rather than accidentally so. Linux has no
-per-binary signature check at install or run time: Debian's trust model signs the *repository*
-metadata, not the package, and `debsig-verify` ships with no policies enabled, so a signature
-inside a standalone `.deb` would be verified by nobody. Checksums are the convention for
-one-off downloads, which is what these are.
+## Upgrading
 
-## After you install it
+Download the new version and install it over the one you have. You don't need to
+uninstall first, and your settings, pairings and sign-in are kept. The installer stops
+the station, replaces it, and starts the receiver service again. A station that was
+started automatically, such as a wall display, starts again too. A window you opened
+yourself stays closed until you open it again.
 
-Turn on **Accept sources from the LAN** under *Service → Pairing* so these can reach the
-station:
+The version a station is running is at the bottom of its window, for example
+`v1.0.8-112`.
 
-| | |
-|---|---|
-| **Home Assistant** | [alertroster-hacs](https://github.com/CloudBedrock/alertroster-hacs) — raise alerts from automations, react when nobody answers |
-| **Omarchy** | [omarchy-alertroster](https://github.com/CloudBedrock/omarchy-alertroster) — page yourself from your desktop |
-| **Asterisk** | [alertroster-ari](https://github.com/CloudBedrock/alertroster-ari) — phone the roster until someone acknowledges |
+## Getting help
 
-The station works standalone on your LAN. Sign in at [alertroster.com](https://alertroster.com)
-and it also escalates off-site — phones, roster, on-site beacons.
-
-That account is what the **n8n** community node drives, over the API rather than the LAN:
-[n8n-nodes-alertroster](https://github.com/CloudBedrock/n8n-nodes-alertroster)
-([npm](https://www.npmjs.com/package/n8n-nodes-alertroster)) — raise and drive incidents, read
-and edit on-call schedules, act on handoffs and overrides, run dead-man's-switch check-ins, and
-start workflows when an incident changes state.
-
-## Issues
-
-Bug reports go to the project you are using it with, or to
-[alertroster.com](https://alertroster.com). Please include the version from the release you
-downloaded — the tag maps to an exact build.
+Contact us through [alertroster.com/support](https://alertroster.com/support). Include the
+version from the bottom of the station's window. That number identifies the exact build
+you are running.
