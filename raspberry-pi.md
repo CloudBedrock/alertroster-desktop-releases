@@ -1,7 +1,9 @@
 # Raspberry Pi
 
 `AlertRoster-RaspberryPi-arm64.tar.gz` contains two programs, `AlertRoster` and
-`alertroster-receiverd`, built for 64-bit Raspberry Pi boards. They are built against the
+`alertroster-receiverd`, built for 64-bit Raspberry Pi boards, and
+`THIRD-PARTY-NOTICES.txt`, the licence notices for the other people's software they
+include. They are built against the
 Qt Boot2Qt system image for Raspberry Pi and run on that image. They are **not** a package
 for Raspberry Pi OS: there is no installer, no application menu entry and no service set
 up to start at login.

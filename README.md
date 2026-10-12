@@ -16,7 +16,7 @@ A station is two programs, and every installer sets up both:
 | Platform | Requires | Download |
 |---|---|---|
 | **Windows** | Windows 10 or 11, 64-bit | [AlertRoster-Setup.exe](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-Setup.exe) |
-| **macOS** | macOS 13 or later, Apple silicon (M1 or newer) | [AlertRoster-macOS.dmg](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-macOS.dmg) |
+| **macOS** | macOS 14.4 (Sonoma) or later, Apple silicon (M1 or newer) | [AlertRoster-macOS.dmg](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-macOS.dmg) |
 | **Ubuntu / Debian** | Ubuntu 24.04 or later, Debian 13 or later, x86-64 | [alertroster-desktop_amd64.deb](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/alertroster-desktop_amd64.deb) |
 | **Arch / Omarchy** | x86-64 | [alertroster-desktop-x86_64.pkg.tar.zst](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/alertroster-desktop-x86_64.pkg.tar.zst) |
 | **Raspberry Pi** | See the [Raspberry Pi page](raspberry-pi.md) | [AlertRoster-RaspberryPi-arm64.tar.gz](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-RaspberryPi-arm64.tar.gz) |
@@ -52,6 +52,10 @@ The [n8n node](https://github.com/CloudBedrock/n8n-nodes-alertroster) is differe
 works with your AlertRoster account over the internet, with its own credentials, so it
 doesn't pair with a station.
 
+On a Mac the station itself can also be driven by AppleScript, Shortcuts and
+`alertroster://` links. See [Automate a Mac station](macos-automation.md). On every
+platform there is also [the command line](command-line.md).
+
 ## Check your download
 
 Every release publishes a `SHA256SUMS` file covering each download. In the folder you
@@ -83,8 +87,33 @@ yourself stays closed until you open it again.
 The version a station is running is at the bottom of its window, for example
 `v1.0.8-112`.
 
+## Licences
+
+**Help → About AlertRoster** shows which build the station is running and the full
+third-party licence notices for the other people's software it includes. Every download
+also carries them as a file, so you can read them without launching anything:
+
+| Platform | Where |
+|---|---|
+| **Windows** | `THIRD-PARTY-NOTICES.txt` in the folder you installed into |
+| **macOS** | `/Applications/AlertRoster.app/Contents/Resources/THIRD-PARTY-NOTICES.txt` |
+| **Ubuntu / Debian, Arch / Omarchy** | `/opt/alertroster/share/doc/alertroster-desktop/THIRD-PARTY-NOTICES.txt` |
+| **Raspberry Pi** | `THIRD-PARTY-NOTICES.txt` in the tarball |
+
+On a machine with no screen, `alertroster-receiverd --licenses` prints the same text.
+
+The notices describe the build that is running: a station that includes something a
+different one does not says so. AlertRoster itself is not open source and none of the
+licences there apply to it.
+
 ## Getting help
 
-Contact us through [alertroster.com/support](https://alertroster.com/support). Include the
-version from the bottom of the station's window. That number identifies the exact build
-you are running.
+Choose **Help → Copy diagnostics** and paste the result into your message. It is a short
+plain-text summary of the station — which build it is running, what it is running on, and
+whether it is reaching the receiver service, your account, your own AWS and your outputs.
+You can read it before you send it: it contains no passwords, keys or tokens, and no
+incident details or positions.
+
+Then contact us through [alertroster.com/support](https://alertroster.com/support). If the
+station will not start at all, send the version from the bottom of its window, or from
+**Help → About AlertRoster**; that number identifies the exact build you are running.

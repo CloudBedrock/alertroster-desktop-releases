@@ -1,6 +1,6 @@
 # Install on macOS
 
-**Requires** macOS 13 (Ventura) or later on a Mac with Apple silicon (M1 or newer).
+**Requires** macOS 14.4 (Sonoma) or later on a Mac with Apple silicon (M1 or newer).
 Macs with Intel processors are not supported.
 
 ## Install
@@ -31,6 +31,11 @@ Then continue with [First run](first-run.md).
 The receiver service belongs to the user who installed it. Its alerts, pairings and
 sign-in are that user's. If the station should run under a different user account, log
 in as that user and run the installer there.
+
+## Automation
+
+AlertRoster on a Mac can be driven by AppleScript, Shortcuts and `alertroster://` links,
+and by anything built on them. See [Automate a Mac station](macos-automation.md).
 
 ## Upgrading
 

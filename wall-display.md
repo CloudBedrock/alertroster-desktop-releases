@@ -30,7 +30,7 @@ setting in the BIOS or firmware. On a desktop Mac, turn on *Start up automatical
 a power failure* under **System Settings → Energy** (called **Energy Saver** on older
 macOS versions).
 
-## A station in kiosk mode (macOS and Linux)
+## A station in kiosk mode
 
 1. Set the station up as described in [First run](first-run.md), including a test alert.
 2. Choose **View → Kiosk mode** (Ctrl+Shift+K). The station switches to the wall display
@@ -44,6 +44,10 @@ macOS versions).
 If the station can't stop the computer from sleeping, it tells you when you turn kiosk
 mode on: *Kiosk mode is on, but this machine may still sleep or run its screensaver.*
 Change the computer's own power settings before relying on it.
+
+On all three platforms AlertRoster starts when somebody **signs in**, not when the
+machine boots, so an unattended display also needs automatic sign-in turned on for that
+account.
 
 To stop using a station as a wall display, untick **Launch at startup and restart on
 crash** and **Kiosk mode** in the View menu.

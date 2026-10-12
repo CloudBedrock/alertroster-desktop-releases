@@ -29,15 +29,17 @@ was true at that time, and new alerts will not appear.
    - **Linux**, in a terminal:
 
      ```bash
-     systemctl --user stop alertroster-receiverd
+     sudo systemctl stop alertroster-receiverd
      pkill -f '^[^ ]*/alertroster-receiverd$'
      ```
 
    - **Windows:** open Task Manager and choose **End task** on every
      **alertroster-receiverd.exe**.
 
-3. Open AlertRoster again. When no receiver service is running, it starts one: through
-   the login item on macOS and the user service on Linux.
+3. Start the receiver service again. On Linux it is the machine's, so it is
+   `sudo systemctl start alertroster-receiverd`; on macOS, opening AlertRoster starts one
+   when nothing is running.
+4. Open AlertRoster again.
 
 ## Ask the receiver service directly
 
@@ -50,21 +52,29 @@ alertroster-receiverd --status                                      # Linux
 /Applications/AlertRoster.app/Contents/MacOS/alertroster-receiverd --status   # macOS
 ```
 
-`alertroster-receiverd --version` prints the version it was built as.
+`alertroster-receiverd --version` prints the version it was built as, and
+`alertroster-receiverd --licenses` prints the third-party licence notices — the same
+ones **Help → About AlertRoster** shows, for a machine with no screen.
 
 ## Logs
 
 - **macOS:** `~/Library/Logs/alertroster-receiverd.log`
-- **Linux:** `journalctl --user -u alertroster-receiverd`
+- **Linux:** `journalctl -u alertroster-receiverd`
 - **Windows:** the receiver service doesn't write a log file yet.
 
 ## Other problems
 
 **Service → Account… says *This machine cannot store a sign-in securely.* or *The secret
 store could not be read.*** The station refuses to keep a sign-in anywhere unprotected. On
-Windows this is expected in this release. On Linux, the receiver service needs a keyring
-service such as GNOME Keyring or KWallet running in your session. Install and unlock one,
-then log out and back in.
+Linux, the receiver service encrypts credentials with a key belonging to the machine,
+using `systemd-creds`; a system without it says so and keeps nothing. On Windows it means
+the Credential Manager refused the read or the write; the message carries what Windows
+reported.
+
+**The station says *this account is not in the station group*.** On Linux the receiver
+service is the machine's, and the people allowed to attach a station to it are the members
+of the `alertroster` group. Add yourself with `sudo usermod -aG alertroster $USER`, then
+log out and back in — a group only reaches a session that starts after it.
 
 **The sign-in email doesn't arrive.** Check the address and your spam folder. For privacy,
 the station shows the same message whether or not the address has an account. Codes
@@ -82,6 +92,15 @@ Pair it again.
 
 ## Contact support
 
-Contact us through [alertroster.com/support](https://alertroster.com/support). Include the
-version from the bottom of the station's window, and, if you can, the output of
-`alertroster-receiverd --status` and the log.
+Choose **Help → Copy diagnostics** and paste the result into your message. It is a short
+plain-text summary of the station — which build it is running, what it is running on, and
+whether it is reaching the receiver service, your account, your own AWS and your outputs
+— and it usually answers the first few questions we would otherwise have to ask.
+
+You can read it before you send it. It deliberately contains **no passwords, keys or
+tokens**, and **no incident details or positions**; where a key is set, it shows only the
+last few characters so we can tell "no key" from "the wrong key".
+
+Then contact us through [alertroster.com/support](https://alertroster.com/support). If the
+station will not start at all, send the version from **Help → About AlertRoster** and, if
+you can, the output of `alertroster-receiverd --status`.
