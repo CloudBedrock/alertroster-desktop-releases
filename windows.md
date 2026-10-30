@@ -23,6 +23,12 @@ Then continue with [First run](first-run.md).
 - AlertRoster in `C:\Program Files\AlertRoster`. The receiver service,
   `alertroster-receiverd.exe`, is installed next to it.
 - An **AlertRoster** shortcut in the Start menu.
+- `alertroster://` links, for the user who ran the installer: a link to an incident from
+  a note, a ticket or a chat opens it on this station, in the window you have open if
+  AlertRoster is already running. A link only shows things; it never acknowledges,
+  resolves or changes anything.
+- A PowerShell module for the API Tester, in `C:\Program Files\AlertRoster\PowerShell`.
+  The command line guide has the details.
 - A sign-in startup entry, **AlertRosterReceiver**, for the user who ran the installer.
   It starts the receiver service each time that user signs in to Windows. The installer
   also starts the service immediately. You can see the entry under **Task Manager →
@@ -42,6 +48,48 @@ sign in as that user and run the installer there.
 Run the new `AlertRoster-Setup.exe`. The installer closes AlertRoster and the receiver
 service, replaces them, and starts the receiver service again. Open AlertRoster from the
 Start menu when it finishes. Your alerts, pairings, outputs and sign-in are kept.
+
+## Installing with the MSI
+
+For a single PC, use `AlertRoster-Setup.exe` as above. For a silent or scripted install,
+there is also an MSI package:
+[AlertRoster.msi](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster.msi).
+It installs the same files and sets up the same things, and it is signed by **Cloud
+Bedrock, LLC** like the setup program.
+
+From an administrator command prompt:
+
+```
+msiexec /i AlertRoster.msi /qn
+```
+
+and to remove it:
+
+```
+msiexec /x AlertRoster.msi /qn
+```
+
+The receiver's sign-in startup entry and the `alertroster://` link handler are set up for
+**the account that runs the installer**. The MSI installs for the whole computer, so it
+needs that command prompt opened with administrator rights — which only works out if
+the station's own user is a Windows administrator and opens it as themselves. If they
+are a standard user, the administrator sign-in you would type in becomes the account
+that gets those entries; use `AlertRoster-Setup.exe` instead, which asks for
+administrator permission only to copy the files.
+
+**Not yet for Intune, Group Policy or SCCM.** Those tools run the installer as the
+`SYSTEM` account, so the receiver would not start, and links would not open, for the
+people who sign in to the station. That is being fixed; until then, install it as the
+station's user.
+
+Use one installer or the other on a PC, not both. They install to the same folder, and
+each would remove files the other still expects. To switch from `AlertRoster-Setup.exe`
+to the MSI, uninstall AlertRoster first.
+
+A new MSI upgrades the one already installed: run it the same way. In **Installed apps**
+its version shows as `1.0.<build>` rather than the release number — `1.0.230` for release
+1.0.9-230 — because Windows compares only the first three parts of an MSI's version
+when it decides whether something is newer.
 
 ## Running a Windows station as a wall display
 
@@ -66,7 +114,7 @@ crash** removes it, and so does deleting it there.
 
 Open **Settings → Apps → Installed apps**, find **AlertRoster** and choose **Uninstall**.
 The uninstaller stops AlertRoster and the receiver service, and removes the Start menu
-shortcut and the receiver service's startup entry.
+shortcut, the receiver service's startup entry and the `alertroster://` link handler.
 
 If the station was a wall display, untick **View → Launch at startup and restart on
 crash** before uninstalling. The uninstaller does not remove that entry yet, and one left

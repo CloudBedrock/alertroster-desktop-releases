@@ -92,7 +92,10 @@ the service is running and what it is attached to.
   and its stored credentials. The credentials are encrypted with a key belonging to this
   machine and readable only by `root`, which is what lets the service use them when
   nobody is logged in.
-- An **AlertRoster** entry in the application menu.
+- An **AlertRoster** entry in the application menu, which also opens `alertroster://`
+  links: a link to an incident from a note, a ticket or a chat opens it on this station.
+  With AlertRoster already running, the link goes to the window you have open. A link only
+  shows things; it never acknowledges, resolves or changes anything.
 
 To see the receiver service's state and log:
 

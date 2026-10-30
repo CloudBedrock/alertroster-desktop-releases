@@ -15,7 +15,7 @@ A station is two programs, and every installer sets up both:
 
 | Platform | Requires | Download |
 |---|---|---|
-| **Windows** | Windows 10 or 11, 64-bit | [AlertRoster-Setup.exe](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-Setup.exe) |
+| **Windows** | Windows 10 or 11, 64-bit | [AlertRoster-Setup.exe](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-Setup.exe), or [AlertRoster.msi](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster.msi) for silent installs ([which one?](windows.md#installing-with-the-msi)) |
 | **macOS** | macOS 14.4 (Sonoma) or later, Apple silicon (M1 or newer) | [AlertRoster-macOS.dmg](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/AlertRoster-macOS.dmg) |
 | **Ubuntu / Debian** | Ubuntu 24.04 or later, Debian 13 or later, x86-64 | [alertroster-desktop_amd64.deb](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/alertroster-desktop_amd64.deb) |
 | **Arch / Omarchy** | x86-64 | [alertroster-desktop-x86_64.pkg.tar.zst](https://github.com/CloudBedrock/alertroster-desktop-releases/releases/latest/download/alertroster-desktop-x86_64.pkg.tar.zst) |

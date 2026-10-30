@@ -113,6 +113,72 @@ station.alerts().filter(a => a.emergency()).map(a => a.name());
 From Terminal, run either kind with `osascript`, or use the `alertroster` command
 itself. See [The command line](command-line.md).
 
+### The API Tester
+
+The dictionary's **API Tester Suite** works on the project open in **Window → API
+Tester**: its requests and folders, environments and variables, what each request got
+back, and collection runs.
+
+```applescript
+tell application "AlertRoster"
+    set p to current api project
+
+    -- Send a request and read what came back
+    set x to send (first api request of p whose name is "Health check")
+    get {status code, response time, tests failed} of x
+
+    -- Make a request in a folder, then change it
+    set r to make new api request at (api folder "Smoke" of p) ¬
+        with properties {name:"Version", url:"{{base}}/version"}
+    set method of r to "POST"
+
+    -- Copy one, and delete what you no longer need
+    duplicate r with properties {name:"Version (staging)"}
+    delete (every api request of p whose name starts with "Scratch")
+
+    -- Switch environment, and run a folder to the end
+    set active environment of api environment group "Servers" of p to "Staging"
+    with timeout of 3600 seconds
+        set theRun to start run (api folder "Smoke" of p) with waiting until done
+    end timeout
+    get {done, tests passed, tests failed} of theRun
+end tell
+```
+
+**send** answers when the response is back. **start run** (AppleScript keeps the word
+*run* for itself) answers at once with the run, or when it ends **with waiting until
+done**; it also takes **iterations**, **concurrency**, **delay** and **stopping at
+first failure**. **make** needs **at**: the project, for its top level, or a folder.
+Every request has a **link** that opens it in the API Tester, and its **api exchanges**
+are its history, newest first.
+
+Scripts never see a secret. A secret variable's **value** reads as dots, and what an
+exchange shows has credentials and secret values already taken out, as the request's
+history does. Setting a secret variable's value puts it in this Mac's keychain, never in
+the project. A script sends with the scripts and files you already allowed for the
+project, and never puts a question on the screen. If a request needs something you
+haven't allowed, it isn't sent, and the error says why.
+
+The API Tester's refusals are numbered from 2001:
+
+| Number | Meaning |
+|---|---|
+| 2001 | No project is open in the API Tester. |
+| 2002 | The project has no such request. |
+| 2003 | The project has no such folder. |
+| 2004 | No environment group defines that variable. |
+| 2005 | The project has no such environment. |
+| 2006 | That project can't be opened. |
+| 2007 | Not sent. The message says why. |
+| 2008 | Something in the command was wrong, such as duplicating a folder. |
+| 2010 | No such run. |
+| 2011 | Nothing has been sent yet. |
+
+Five sample scripts come with AlertRoster: send a request, run a folder, switch
+environment, make a request from the URL on the clipboard, and list the requests that
+are failing. They are in **AlertRoster.app/Contents/Resources/Sample Scripts/API
+Tester**. Open one in Script Editor to read it or run it.
+
 ## Shortcuts
 
 Open the **Shortcuts** app and search for AlertRoster. The actions are:
@@ -132,6 +198,42 @@ Open the **Shortcuts** app and search for AlertRoster. The actions are:
 
 A few are ready to use with no setup: *AlertRoster status*, *Acknowledge an alert in
 AlertRoster*, *Check in with AlertRoster*.
+
+### The API Tester's actions
+
+These work on the project open in **Window → API Tester**:
+
+- **Send API Request**, which returns the response: its status code, body, headers,
+  time, and how many tests passed and failed.
+- **Get Last API Response**, the newest response a request got, without sending it again.
+- **Run API Requests**, for a folder or the whole project, as many times as you say. It
+  waits for the run to end unless you turn **Wait Until Done** off.
+- **Get API Run Result**, for a run that is still going or has finished.
+- **Set API Variable** and **Switch API Environment**.
+- **Open API Request**, which brings the API Tester forward with the request selected.
+- **Find API Requests**, **Find API Environments** and the like, for example *API
+  Requests where Folder is Smoke*.
+
+Shortcuts sees what a script sees. Secret values read as dots. A response shows nothing
+the request's history wouldn't, and that leaves out credentials and secret values.
+Requests run only the scripts and files you already allowed for the project. A refusal
+stops the shortcut with a sentence saying why.
+
+### Services
+
+With text selected in any app, the **Services** menu (right-click, or the app's menu
+under its name) has two items:
+
+- **New API Request from cURL** makes a request from a `curl` command, such as the one a
+  browser's *Copy as cURL* gives you or an API's documentation shows.
+- **New API Request from URL** makes a GET request from a link.
+
+The request goes at the top of the open project, and the API Tester comes forward with
+it selected. Nothing is sent until you send it. What the command does that AlertRoster
+won't take from copied text is listed in the request's description: a file it would
+upload, a proxy, turning off the TLS certificate check, and options a request can't
+hold, such as a client certificate. Set any of those yourself if you mean them. Only
+`http` and `https` addresses are taken.
 
 ## Run a shortcut when something happens
 
@@ -247,6 +349,20 @@ tell application "AlertRoster" to get current link
 Then, with an incident selected on the board or its record window in front, invoke
 Hookmark as usual. A hooked note opens straight back to the incident's record, even
 months later.
+
+The same two scripts work for the API Tester. With its window in front, they give the
+selected request or folder, so you can hook a request to the ticket, spec or note it
+belongs with. The link opens the API Tester with that request selected.
+
+Links you can copy yourself:
+
+| Where | Gives |
+|---|---|
+| **Edit → Copy Link** in the API Tester (⌥⌘C), or **Copy Link** on a request or folder in the sidebar | the request or folder |
+| **⋯ → Copy Link to This Exchange** above a response | that response, from the request's history, for as long as history keeps it |
+
+An API Tester link opens and selects things; it never sends a request. A link that would
+send something or switch environment asks first.
 
 ## The responder report link
 
